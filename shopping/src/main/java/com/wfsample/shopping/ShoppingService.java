@@ -62,7 +62,7 @@ public class ShoppingService extends Application<ApplicationConfiguration> {
     @GET
     @Path("/menu")
     public Response getShoppingMenu(@Context HttpHeaders httpHeaders) {
-      ShirtStyleDTO[] styles = httpGet(client, "localhost", configuration.getStylingPort(),
+      ShirtStyleDTO[] styles = httpGet(client, "stylingservice", configuration.getStylingPort(),
           "style", null, ShirtStyleDTO[].class, "getAlStyles");
       return Response.ok(styles).build();
     }
@@ -73,7 +73,7 @@ public class ShoppingService extends Application<ApplicationConfiguration> {
     public Response orderShirts(OrderDTO orderDTO, @Context HttpHeaders httpHeaders) {
       Map<String, String> queryParameters = new HashMap<>();
       queryParameters.put("quantity", Integer.toString(orderDTO.getQuantity()));
-      OrderStatusDTO statusDTO = httpGet(client, "localhost", configuration.getStylingPort(),
+      OrderStatusDTO statusDTO = httpGet(client, "stylingservice", configuration.getStylingPort(),
           "style/" + orderDTO.getStyleName() + "/make", queryParameters, OrderStatusDTO.class,
           "makeShirts");
       return Response.ok(statusDTO).build();
