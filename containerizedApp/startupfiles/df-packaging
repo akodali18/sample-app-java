@@ -1,0 +1,7 @@
+FROM us.gcr.io/wavefront-gcp-dev/akodali/java
+
+COPY packaging-1.0-SNAPSHOT.jar /app/packaging-1.0-SNAPSHOT.jar
+
+COPY packapp.yaml /app/app.yaml
+
+ENTRYPOINT java -jar /app/packaging-1.0-SNAPSHOT.jar /app/app.yaml

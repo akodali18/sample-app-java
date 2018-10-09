@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: packaging-app-deployment
+  labels:
+    app: beach-shirt-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: packaging-app-pod
+      app: beach-shirt-app
+  template:
+    metadata:
+      name: packaging-app-pod
+      labels:
+        name: packaging-app-pod
+        app: beach-shirt-app
+
+    spec:
+      containers:
+        - name: packaging-app
+          image: us.gcr.io/wavefront-gcp-dev/akodali/packaging
+          ports:
+            - containerPort: 50053

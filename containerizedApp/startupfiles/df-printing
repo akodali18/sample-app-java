@@ -1,0 +1,7 @@
+FROM us.gcr.io/wavefront-gcp-dev/akodali/java
+
+COPY printing-1.0-SNAPSHOT.jar /app/printing-1.0-SNAPSHOT.jar
+
+COPY printapp.yaml /app/app.yaml
+
+ENTRYPOINT java -jar /app/printing-1.0-SNAPSHOT.jar /app/app.yaml

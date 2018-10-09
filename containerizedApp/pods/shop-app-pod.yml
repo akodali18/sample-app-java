@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shopping-app-pod
+  labels:
+    name: shopping-app-pod
+    app: beach-shirt-app
+    
+spec:
+  containers:
+    - name: shopping-app
+      image: akodali/shopping
+      ports: 
+        - containerPort: 50050

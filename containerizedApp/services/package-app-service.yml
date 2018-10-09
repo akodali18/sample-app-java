@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: packagingservice
+  labels:
+    name: packaging-service
+    app: beach-shirt-app
+
+
+spec:
+  ports:
+    - targetPort: 50053
+      port: 50053
+
+  selector:
+      name: packaging-app-pod
+      app: beach-shirt-app
+
