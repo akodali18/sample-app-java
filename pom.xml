@@ -18,6 +18,7 @@
         <module>printing</module>
         <module>packaging</module>
         <module>common</module>
+        <module>loadgen</module>
     </modules>
 
     <properties>
