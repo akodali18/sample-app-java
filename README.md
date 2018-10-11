@@ -17,3 +17,9 @@ java -jar ./packaging/target/packaging-1.0-SNAPSHOT.jar ./packaging/app.yaml
 http://localhost:50050/shop/order
 Payload: {"styleName" : "testStyle1","quantity" : 5}
 ```
+
+
+- Running loadgen:
+```
+java -jar loadgen/target/loadgen-1.0-SNAPSHOT.jar 80 6 30 300 5
+```
