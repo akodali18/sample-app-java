@@ -24,6 +24,12 @@ public class GrpcServiceConfig {
   @JsonProperty
   private MetadataConfig metadata = new MetadataConfig();
 
+  /**
+   * Config for reporting telemetry data to wavefront.
+   */
+  @JsonProperty
+  private WavefrontReportingConfig wavefrontReporting;
+
   public int getGrpcPort() {
     return grpcPort;
   }
@@ -31,5 +37,9 @@ public class GrpcServiceConfig {
   @Nonnull
   public MetadataConfig getMetadata() {
     return metadata;
+  }
+
+  public WavefrontReportingConfig getWavefrontReporting() {
+    return wavefrontReporting;
   }
 }

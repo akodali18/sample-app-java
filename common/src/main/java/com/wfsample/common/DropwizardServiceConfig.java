@@ -38,6 +38,12 @@ public class DropwizardServiceConfig extends Configuration {
   @JsonProperty
   private MetadataConfig metadata = new MetadataConfig();
 
+  /**
+   * Config for reporting telemetry data to wavefront.
+   */
+  @JsonProperty
+  private WavefrontReportingConfig wavefrontReporting;
+
   public int getStylingPort() {
     return stylingPort;
   }
@@ -53,5 +59,9 @@ public class DropwizardServiceConfig extends Configuration {
   @Nonnull
   public MetadataConfig getMetadata() {
     return metadata;
+  }
+
+  public WavefrontReportingConfig getWavefrontReporting() {
+    return wavefrontReporting;
   }
 }
