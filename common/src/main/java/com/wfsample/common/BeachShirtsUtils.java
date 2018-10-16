@@ -3,6 +3,10 @@ package com.wfsample.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
+import com.wavefront.sdk.common.WavefrontSender;
+import com.wavefront.sdk.common.application.ApplicationTags;
+import com.wavefront.sdk.direct_ingestion.WavefrontDirectIngestionClient;
+import com.wavefront.sdk.proxy.WavefrontProxyClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +18,8 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static com.wfsample.common.WavefrontReportingConfig.Mechanism.DIRECT;
 
 /**
  * Utilities for use by the various beachshirts application related services.
@@ -62,5 +68,23 @@ public final class BeachShirtsUtils {
       config = new GrpcServiceConfig();
     }
     return config;
+  }
+
+  public static WavefrontSender getWavefrontSender(WavefrontReportingConfig config) {
+    if (config.getReportingMechanism() == DIRECT) {
+      return new WavefrontDirectIngestionClient.Builder(config.getServer(), config.getToken()).
+          flushIntervalSeconds(config.getFlushIntervalSeconds()).build();
+    } else {
+      return new WavefrontProxyClient.Builder(config.getProxyHost()).
+          metricsPort(config.getProxyMetricsPort()).
+          distributionPort(config.getProxyDistributionsPort()).
+          tracingPort(config.getProxyTracingPort()).
+          flushIntervalSeconds(config.getFlushIntervalSeconds()).build();
+    }
+  }
+
+  public static ApplicationTags getApplicationTags(MetadataConfig config) {
+    return new ApplicationTags.Builder(config.getApplication(), config.getService()).
+        shard(config.getShard()).cluster(config.getCluster()).build();
   }
 }

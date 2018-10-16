@@ -18,3 +18,10 @@ metadata:
   customTags:
     location: Palo-Alto
     env: production
+
+wavefrontReporting:
+  reportingMechanism: "DIRECT"
+  server: "replace-with-wavefront-url"
+  token: "wavefront-token"
+  flushIntervalSeconds: 1
+  source: wavefront-source20

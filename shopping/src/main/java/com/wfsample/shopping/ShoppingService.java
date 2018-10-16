@@ -1,5 +1,11 @@
 package com.wfsample.shopping;
 
+import com.wavefront.sdk.common.WavefrontSender;
+import com.wavefront.sdk.common.application.ApplicationTags;
+import com.wavefront.sdk.grpc.reporter.WavefrontGrpcReporter;
+import com.wavefront.sdk.jersey.WavefrontJerseyFilter;
+import com.wavefront.sdk.jersey.reporter.WavefrontJerseyReporter;
+import com.wfsample.common.BeachShirtsUtils;
 import com.wfsample.common.DropwizardServiceConfig;
 import com.wfsample.common.dto.OrderDTO;
 import com.wfsample.common.dto.OrderStatusDTO;
@@ -36,7 +42,6 @@ public class ShoppingService extends Application<DropwizardServiceConfig> {
   private DropwizardServiceConfig configuration;
 
   private ShoppingService() {
-
   }
 
   public static void main(String[] args) throws Exception {
@@ -44,9 +49,18 @@ public class ShoppingService extends Application<DropwizardServiceConfig> {
   }
 
   @Override
-  public void run(DropwizardServiceConfig configuration, Environment environment)
+  public void run(DropwizardServiceConfig config, Environment environment)
       throws Exception {
-    this.configuration = configuration;
+    this.configuration = config;
+    WavefrontSender sender = BeachShirtsUtils.getWavefrontSender(config.getWavefrontReporting());
+    ApplicationTags tags = BeachShirtsUtils.getApplicationTags(config.getMetadata());
+    WavefrontJerseyReporter jerseyReporter = new WavefrontJerseyReporter.Builder(tags).
+        withSource(config.getWavefrontReporting().getSource()).
+        reportingIntervalSeconds(config.getWavefrontReporting().getFlushIntervalSeconds()).
+        build(sender);
+    jerseyReporter.start();
+    WavefrontJerseyFilter jerseyFilter = new WavefrontJerseyFilter(jerseyReporter, tags);
+    environment.jersey().register(jerseyFilter);
     environment.jersey().register(new ShoppingWebResource());
   }
 

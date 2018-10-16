@@ -59,13 +59,13 @@ public class WavefrontReportingConfig {
    * Interval at which to report telemetry data.
    */
   @JsonProperty
-  private int flushIntervalSeconds = 1;
+  private int flushIntervalSeconds = 60;
 
   /**
    * Host/Source to be used for the telemetry data.
    */
   @JsonProperty
-  private String dataSource;
+  private String source;
 
   /**
    * Wavefront reporting mechanism.
@@ -104,8 +104,8 @@ public class WavefrontReportingConfig {
     return flushIntervalSeconds;
   }
 
-  public String getDataSource() {
-    return dataSource;
+  public String getSource() {
+    return source;
   }
 
   public int getProxyTracingPort() {

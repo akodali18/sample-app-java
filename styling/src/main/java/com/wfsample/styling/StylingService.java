@@ -1,11 +1,18 @@
 package com.wfsample.styling;
 
+import com.wavefront.sdk.common.WavefrontSender;
+import com.wavefront.sdk.common.application.ApplicationTags;
+import com.wavefront.sdk.grpc.WavefrontClientInterceptor;
+import com.wavefront.sdk.grpc.reporter.WavefrontGrpcReporter;
+import com.wavefront.sdk.jersey.WavefrontJerseyFilter;
+import com.wavefront.sdk.jersey.reporter.WavefrontJerseyReporter;
 import com.wfsample.beachshirts.PackagingGrpc;
 import com.wfsample.beachshirts.PrintRequest;
 import com.wfsample.beachshirts.PrintingGrpc;
 import com.wfsample.beachshirts.Shirt;
 import com.wfsample.beachshirts.ShirtStyle;
 import com.wfsample.beachshirts.WrapRequest;
+import com.wfsample.common.BeachShirtsUtils;
 import com.wfsample.common.DropwizardServiceConfig;
 import com.wfsample.common.dto.OrderStatusDTO;
 import com.wfsample.common.dto.ShirtStyleDTO;
@@ -25,6 +32,7 @@ import javax.ws.rs.core.Response;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
+import io.grpc.ClientInterceptor;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -35,7 +43,6 @@ import io.grpc.ManagedChannelBuilder;
  * @author Srujan Narkedamalli (snarkedamall@wavefront.com).
  */
 public class StylingService extends Application<DropwizardServiceConfig> {
-  private DropwizardServiceConfig configuration;
 
   private StylingService() {
   }
@@ -45,10 +52,25 @@ public class StylingService extends Application<DropwizardServiceConfig> {
   }
 
   @Override
-  public void run(DropwizardServiceConfig configuration, Environment environment)
+  public void run(DropwizardServiceConfig config, Environment environment)
       throws Exception {
-    this.configuration = configuration;
-    environment.jersey().register(new StylingWebResource());
+    WavefrontSender sender = BeachShirtsUtils.getWavefrontSender(config.getWavefrontReporting());
+    ApplicationTags tags = BeachShirtsUtils.getApplicationTags(config.getMetadata());
+    WavefrontGrpcReporter grpcReporter = new WavefrontGrpcReporter.Builder(tags).
+        withSource(config.getWavefrontReporting().getSource()).
+        reportingIntervalSeconds(config.getWavefrontReporting().getFlushIntervalSeconds()).
+        build(sender);
+    grpcReporter.start();
+    WavefrontJerseyReporter jerseyReporter = new WavefrontJerseyReporter.Builder(tags).
+        withSource(config.getWavefrontReporting().getSource()).
+        reportingIntervalSeconds(config.getWavefrontReporting().getFlushIntervalSeconds()).
+        build(sender);
+    jerseyReporter.start();
+    WavefrontJerseyFilter jerseyFilter = new WavefrontJerseyFilter(jerseyReporter, tags);
+    WavefrontClientInterceptor interceptor =
+        new WavefrontClientInterceptor(grpcReporter, tags, true);
+    environment.jersey().register(jerseyFilter);
+    environment.jersey().register(new StylingWebResource(config, interceptor));
   }
 
   @Path("/style")
@@ -59,7 +81,7 @@ public class StylingService extends Application<DropwizardServiceConfig> {
     private final PrintingGrpc.PrintingBlockingStub printing;
     private final PackagingGrpc.PackagingBlockingStub packaging;
 
-    public StylingWebResource() {
+    public StylingWebResource(DropwizardServiceConfig config, ClientInterceptor interceptor) {
       ShirtStyleDTO dto = new ShirtStyleDTO();
       dto.setName("style1");
       dto.setImageUrl("style1Image");
@@ -69,9 +91,9 @@ public class StylingService extends Application<DropwizardServiceConfig> {
       shirtStyleDTOS.add(dto);
       shirtStyleDTOS.add(dto2);
       ManagedChannel printingChannel = ManagedChannelBuilder.forAddress("localhost",
-          configuration.getPrintingPort()).usePlaintext().build();
+          config.getPrintingPort()).intercept(interceptor).usePlaintext().build();
       ManagedChannel packagingChannel = ManagedChannelBuilder.forAddress("localhost",
-          configuration.getPackagingPort()).usePlaintext().build();
+          config.getPackagingPort()).intercept(interceptor).usePlaintext().build();
       printing = PrintingGrpc.newBlockingStub(printingChannel);
       packaging = PackagingGrpc.newBlockingStub(packagingChannel);
 
