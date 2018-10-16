@@ -32,6 +32,24 @@ public class DropwizardServiceConfig extends Configuration {
   private int packagingPort = 50053;
 
   /**
+   * Host on which the styling service is running.
+   */
+  @JsonProperty
+  private String stylingHost = "stylingService";
+
+  /**
+   * Host on which the styling service is running.
+   */
+  @JsonProperty
+  private String printingHost = "printingService";
+
+  /**
+   * Host on which the styling service is running.
+   */
+  @JsonProperty
+  private String packagingHost = "packagingService";
+
+  /**
    * Metadata associated with a specific instance of a service.
    */
   @Nonnull
@@ -63,5 +81,17 @@ public class DropwizardServiceConfig extends Configuration {
 
   public WavefrontReportingConfig getWavefrontReporting() {
     return wavefrontReporting;
+  }
+
+  public String getStylingHost() {
+    return stylingHost;
+  }
+
+  public String getPrintingHost() {
+    return printingHost;
+  }
+
+  public String getPackagingHost() {
+    return packagingHost;
   }
 }

@@ -90,9 +90,9 @@ public class StylingService extends Application<DropwizardServiceConfig> {
       dto2.setImageUrl("style2Image");
       shirtStyleDTOS.add(dto);
       shirtStyleDTOS.add(dto2);
-      ManagedChannel printingChannel = ManagedChannelBuilder.forAddress("localhost",
+      ManagedChannel printingChannel = ManagedChannelBuilder.forAddress(config.getPrintingHost(),
           config.getPrintingPort()).intercept(interceptor).usePlaintext().build();
-      ManagedChannel packagingChannel = ManagedChannelBuilder.forAddress("localhost",
+      ManagedChannel packagingChannel = ManagedChannelBuilder.forAddress(config.getPackagingHost(),
           config.getPackagingPort()).intercept(interceptor).usePlaintext().build();
       printing = PrintingGrpc.newBlockingStub(printingChannel);
       packaging = PackagingGrpc.newBlockingStub(packagingChannel);

@@ -2,7 +2,6 @@ package com.wfsample.shopping;
 
 import com.wavefront.sdk.common.WavefrontSender;
 import com.wavefront.sdk.common.application.ApplicationTags;
-import com.wavefront.sdk.grpc.reporter.WavefrontGrpcReporter;
 import com.wavefront.sdk.jersey.WavefrontJerseyFilter;
 import com.wavefront.sdk.jersey.reporter.WavefrontJerseyReporter;
 import com.wfsample.common.BeachShirtsUtils;
@@ -76,8 +75,8 @@ public class ShoppingService extends Application<DropwizardServiceConfig> {
     @GET
     @Path("/menu")
     public Response getShoppingMenu(@Context HttpHeaders httpHeaders) {
-      ShirtStyleDTO[] styles = httpGet(client, "localhost", configuration.getStylingPort(),
-          "style", null, ShirtStyleDTO[].class, "getAlStyles");
+      ShirtStyleDTO[] styles = httpGet(client, configuration.getStylingHost(),
+          configuration.getStylingPort(), "style", null, ShirtStyleDTO[].class, "getAlStyles");
       return Response.ok(styles).build();
     }
 
@@ -87,9 +86,9 @@ public class ShoppingService extends Application<DropwizardServiceConfig> {
     public Response orderShirts(OrderDTO orderDTO, @Context HttpHeaders httpHeaders) {
       Map<String, String> queryParameters = new HashMap<>();
       queryParameters.put("quantity", Integer.toString(orderDTO.getQuantity()));
-      OrderStatusDTO statusDTO = httpGet(client, "localhost", configuration.getStylingPort(),
-          "style/" + orderDTO.getStyleName() + "/make", queryParameters, OrderStatusDTO.class,
-          "makeShirts");
+      OrderStatusDTO statusDTO = httpGet(client, configuration.getStylingHost(),
+          configuration.getStylingPort(), "style/" + orderDTO.getStyleName() + "/make",
+          queryParameters, OrderStatusDTO.class, "makeShirts");
       return Response.ok(statusDTO).build();
     }
   }
