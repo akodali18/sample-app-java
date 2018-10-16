@@ -5,6 +5,7 @@ metadata:
   labels:
     name: printing-service
     app: beach-shirt-app
+  namespace: containerized-sample-app
 
 
 spec:
