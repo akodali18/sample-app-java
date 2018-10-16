@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: printing-app-deployment
+  labels:
+    app: beach-shirt-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: printing-app-pod
+      app: beach-shirt-app
+  template:
+    metadata:
+      name: printing-app-pod
+      labels:
+        name: printing-app-pod
+        app: beach-shirt-app
+
+    spec:
+      containers:
+        - name: printing-app
+          image: us.gcr.io/wavefront-gcp-dev/akodali/printing
+          ports:
+            - containerPort: 50052

@@ -1,0 +1,26 @@
+server:
+  applicationConnectors:
+  - type: http
+    port: 50050
+  adminConnectors:
+  - type: http
+    port: 50150
+
+stylingPort: 50051
+stylingHost: stylingservice
+
+metadata:
+  application: beachshirts
+  cluster: us-west
+  service: shopping
+  shard: primary
+  customTags:
+    location: Palo-Alto
+    env: production
+
+wavefrontReporting:
+  reportingMechanism: "DIRECT"
+  server: https://tracing.wavefront.com
+  token: 69d50aa7-df11-41c0-a0a5-ffdcaf625722
+  flushIntervalSeconds: 1
+  source: wavefront-source20
