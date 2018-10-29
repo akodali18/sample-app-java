@@ -4,4 +4,4 @@ COPY delivery-0.9.0-SNAPSHOT.jar /app/delivery-0.9.0-SNAPSHOT.jar
 
 COPY deliapp.yaml /app/app.yaml
 
-ENTRYPOINT java -jar /app/delivery-0.9.0-SNAPSHOT.jar /app/app.yaml
+ENTRYPOINT java -jar /app/delivery-0.9.0-SNAPSHOT.jar --spring.config.location=/app/app.yaml
