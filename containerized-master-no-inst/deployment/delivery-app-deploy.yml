@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-app-deployment
+  labels:
+    app: beach-shirt-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: delivery-app-pod
+      app: beach-shirt-app
+  template:
+    metadata:
+      name: delivery-app-pod
+      labels:
+        name: delivery-app-pod
+        app: beach-shirt-app
+
+    spec:
+      containers:
+        - name: delivery-app
+          image: us.gcr.io/wavefront-gcp-dev/akodali/delivery
+          ports:
+            - containerPort: 50054
