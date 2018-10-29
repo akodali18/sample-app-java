@@ -4,6 +4,7 @@ metadata:
   name: delivery-app-deployment
   labels:
     app: beach-shirt-app
+  namespace: containerized-beachshirts
 spec:
   replicas: 1
   selector:

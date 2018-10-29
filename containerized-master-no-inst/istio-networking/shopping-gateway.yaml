@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: shopping-gateway-containerized-sample-app-ns
+  name: shopping-gateway-containerized-beachshirts-ns
 spec:
   selector:
     istio: ingressgateway # use istio default controller

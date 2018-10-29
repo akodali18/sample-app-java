@@ -5,7 +5,7 @@ metadata:
   labels:
     name: packaging-service
     app: beach-shirt-app
-  namespace: containerized-sample-app
+  namespace: containerized-beachshirts
 
 
 spec:
