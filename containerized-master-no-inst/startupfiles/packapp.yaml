@@ -1,0 +1,17 @@
+grpcPort: 50053
+
+metadata:
+  application: beachshirts
+  cluster: us-west
+  service: packaging
+  shard: primary
+  customTags:
+    location: Palo-Alto
+    env: production
+
+wavefrontReporting:
+  reportingMechanism: "DIRECT"
+  server: https://tracing.wavefront.com
+  token: 69d50aa7-df11-41c0-a0a5-ffdcaf625722
+  flushIntervalSeconds: 1
+  source: wavefront-source20

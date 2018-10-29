@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: styling-app-deployment
+  labels:
+    app: beach-shirt-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: styling-app-pod
+      app: beach-shirt-app
+  template:
+    metadata:
+      name: styling-app-pod
+      labels:
+        name: styling-app-pod
+        app: beach-shirt-app
+
+    spec:
+      containers:
+        - name: styling-app
+          image: us.gcr.io/wavefront-gcp-dev/akodali/styling
+          ports:
+            - containerPort: 50051
