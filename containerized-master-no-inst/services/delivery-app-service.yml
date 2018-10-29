@@ -5,6 +5,7 @@ metadata:
   labels:
     name: delivery-service
     app: beach-shirt-app
+  namespace: containerized-beachshirts
 
 
 spec:

@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: shopping-service
-  namespace: containerized-sample-app
+  namespace: containerized-beachshirts
 spec:
   host: shopping-service
   trafficPolicy:
@@ -17,7 +17,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: stylingservice
-  namespace: containerized-sample-app
+  namespace: containerized-beachshirts
 spec:
   host: stylingservice
   trafficPolicy:
@@ -38,7 +38,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: printingservice
-  namespace: containerized-sample-app
+  namespace: containerized-beachshirts
 spec:
   host: printingservice
   trafficPolicy:
@@ -56,9 +56,27 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: packagingservice
-  namespace: containerized-sample-app
+  namespace: containerized-beachshirts
 spec:
   host: packagingservice
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: deliveryservice
+  namespace: containerized-beachshirts
+spec:
+  host: deliveryservice
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
