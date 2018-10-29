@@ -5,6 +5,7 @@ metadata:
   labels:
     name: styling-service
     app: beach-shirt-app
+  namespace: containerized-sample-app
 
 
 spec:
