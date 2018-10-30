@@ -1,2 +1,18 @@
 server:
   port: 50054
+
+host: wavefront-source20
+
+applicationTagsConfig:
+  application: beachshirts
+  cluster: us-west
+  service: styling
+  shard: primary
+  customTags:
+    location: Palo-Alto
+    env: production
+
+wavefrontReporting:
+  reportingMechanism: "direct"
+  server: https://tracing.wavefront.com
+  token: b31a99f4-cd87-46b8-a364-b6f8ec0a3255

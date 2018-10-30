@@ -25,6 +25,6 @@ metadata:
 wavefrontReporting:
   reportingMechanism: "DIRECT"
   server: https://tracing.wavefront.com
-  token: 69d50aa7-df11-41c0-a0a5-ffdcaf625722
+  token: b31a99f4-cd87-46b8-a364-b6f8ec0a3255
   flushIntervalSeconds: 1
   source: wavefront-source20
