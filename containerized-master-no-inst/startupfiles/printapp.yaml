@@ -1,5 +1,5 @@
 grpcPort: 50052
-host: wavefront-source20
+host: wfcontainer-source20
 
 applicationTagsConfig:
   application: beachshirts
@@ -12,5 +12,5 @@ applicationTagsConfig:
 
 wavefrontReporting:
   reportingMechanism: "direct"
-  server: "replace-with-wavefront-url"
-  token: "replace-with-wavefront-token"
+  server: https://tracing.wavefront.com
+  token: da0ec2bf-a933-481b-9fbb-a21e08f11523
