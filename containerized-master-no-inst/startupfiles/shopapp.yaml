@@ -7,9 +7,13 @@ server:
     port: 50150
 
 stylingPort: 50051
-stylingHost: stylingservice
+deliveryPort: 50054
+stylingHost: "localhost"
+deliveryHost: "localhost"
 
-metadata:
+host: wavefront-source20
+
+applicationTagsConfig:
   application: beachshirts
   cluster: us-west
   service: shopping
@@ -19,8 +23,6 @@ metadata:
     env: production
 
 wavefrontReporting:
-  reportingMechanism: "DIRECT"
-  server: https://tracing.wavefront.com
-  token: b31a99f4-cd87-46b8-a364-b6f8ec0a3255
-  flushIntervalSeconds: 1
-  source: wavefront-source20
+  reportingMechanism: "direct"
+  server: "replace-with-wavefront-url"
+  token: "replace-with-wavefront-token"

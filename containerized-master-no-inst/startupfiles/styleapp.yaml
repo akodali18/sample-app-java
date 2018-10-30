@@ -6,14 +6,15 @@ server:
   - type: http
     port: 50151
 
-
 printingPort: 50052
 packagingPort: 50053
 
-printingHost: printingservice
-packagingHost: packagingservice
+printingHost: "localhost"
+packagingHost: "localhost"
 
-metadata:
+host: wavefront-source20
+
+applicationTagsConfig:
   application: beachshirts
   cluster: us-west
   service: styling
@@ -23,8 +24,6 @@ metadata:
     env: production
 
 wavefrontReporting:
-  reportingMechanism: "DIRECT"
-  server: https://tracing.wavefront.com
-  token: b31a99f4-cd87-46b8-a364-b6f8ec0a3255
-  flushIntervalSeconds: 1
-  source: wavefront-source20
+  reportingMechanism: "direct"
+  server: "replace-with-wavefront-url"
+  token: "replace-with-wavefront-token"

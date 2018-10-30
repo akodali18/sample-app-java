@@ -1,6 +1,7 @@
 grpcPort: 50053
+host: wfcontainer-source20
 
-metadata:
+applicationTagsConfig:
   application: beachshirts
   cluster: us-west
   service: packaging
@@ -10,8 +11,6 @@ metadata:
     env: production
 
 wavefrontReporting:
-  reportingMechanism: "DIRECT"
+  reportingMechanism: "direct"
   server: https://tracing.wavefront.com
   token: b31a99f4-cd87-46b8-a364-b6f8ec0a3255
-  flushIntervalSeconds: 1
-  source: wavefront-source20

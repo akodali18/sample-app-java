@@ -1,12 +1,12 @@
 server:
   port: 50054
 
-host: wavefront-source20
+host: wfcontainer-source20
 
 applicationTagsConfig:
   application: beachshirts
   cluster: us-west
-  service: styling
+  service: delivery
   shard: primary
   customTags:
     location: Palo-Alto
