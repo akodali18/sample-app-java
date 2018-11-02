@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+# Kubernetes versions after 1.9.0 should use apps/v1
+# Kubernetes versions before 1.8.0 should use apps/v1beta1 or extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+   app: wavefront-proxy
+   name: wavefront-proxy
+  name: wavefront-proxy
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+    k8s-app: wavefront-proxy
+  template:
+    metadata:
+      labels:
+        k8s-app: wavefront-proxy
+    spec:
+      containers:
+      - name: wavefront-proxy
+        image: wavefronthq/proxy:latest
+        imagePullPolicy: Always
+        env:
+        - name: WAVEFRONT_URL
+          value: https://tracing.wavefront.com/api/
+        - name: WAVEFRONT_TOKEN
+          value: b31a99f4-cd87-46b8-a364-b6f8ec0a3255
+        ports:
+        - containerPort: 2878
+          protocol: TCP
+        securityContext:
+          privileged: false

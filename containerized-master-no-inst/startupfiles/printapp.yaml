@@ -1,8 +1,8 @@
 grpcPort: 50052
-host: wfcontainer-source20
+host: prod-beachshirt-app20
 
 applicationTagsConfig:
-  application: beachshirts
+  application: beachshirts-containerized
   cluster: us-west
   service: printing
   shard: primary
@@ -13,4 +13,4 @@ applicationTagsConfig:
 wavefrontReporting:
   reportingMechanism: "direct"
   server: https://tracing.wavefront.com
-  token: da0ec2bf-a933-481b-9fbb-a21e08f11523
+  token: b31a99f4-cd87-46b8-a364-b6f8ec0a3255
