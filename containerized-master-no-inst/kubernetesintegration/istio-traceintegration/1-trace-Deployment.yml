@@ -1,0 +1,72 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: istio-tracing
+  namespace: istio-system
+  labels:
+    app: istio-tracing
+    chart: tracing-0.1.0
+    release: RELEASE-NAME
+    heritage: Tiller
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wavefront-proxy
+      annotations:
+        sidecar.istio.io/inject: "false"
+        scheduler.alpha.kubernetes.io/critical-pod: ""
+    spec:
+      containers:
+        - name: wavefront-proxy
+          image: "us.gcr.io/wavefront-gcp-dev/akodali/wavefront-proxy"
+          imagePullPolicy: Always
+          env:
+          - name: WAVEFRONT_URL
+            value: https://virunga.wavefront.com/api/
+          - name: WAVEFRONT_TOKEN
+            value: a1656497-850f-4bba-ac9d-a6ae12764efe
+          - name: WAVEFRONT_PROXY_ARGS
+            value: --traceZipkinListenerPorts 9411
+          ports:
+          - containerPort: 2878
+            protocol: TCP
+          - containerPort: 9411
+          - containerPort: 16686
+          securityContext:
+            privileged: false
+            
+      affinity:      
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - ppc64le
+                - s390x
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - ppc64le
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - s390x
