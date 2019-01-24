@@ -1,3 +1,6 @@
+
+---
+# Source: istio/charts/tracing/templates/deployment.yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -5,37 +8,53 @@ metadata:
   namespace: istio-system
   labels:
     app: istio-tracing
-    chart: tracing-0.1.0
-    release: RELEASE-NAME
+    chart: tracing-1.0.3
+    release: istio
     heritage: Tiller
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: wavefront-proxy
+        app: jaeger
       annotations:
         sidecar.istio.io/inject: "false"
         scheduler.alpha.kubernetes.io/critical-pod: ""
     spec:
       containers:
-        - name: wavefront-proxy
-          image: "us.gcr.io/wavefront-gcp-dev/akodali/wavefront-proxy-withmetrics"
-          imagePullPolicy: Always
-          env:
-          - name: WAVEFRONT_URL
-            value: https://tracing.wavefront.com/api/
-          - name: WAVEFRONT_TOKEN
-            value: da0ec2bf-a933-481b-9fbb-a21e08f11523
-          - name: WAVEFRONT_PROXY_ARGS
-            value: --traceZipkinListenerPorts 9411
+        - name: jaeger
+          image: "docker.io/jaegertracing/all-in-one:1.5"
+          imagePullPolicy: IfNotPresent
           ports:
-          - containerPort: 2878
-            protocol: TCP
-          - containerPort: 9411
-          - containerPort: 16686
-          securityContext:
-            privileged: false
+            - containerPort: 9411
+            - containerPort: 16686
+            - containerPort: 5775
+              protocol: UDP
+            - containerPort: 6831
+              protocol: UDP
+            - containerPort: 6832
+              protocol: UDP
+          env:
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: COLLECTOR_ZIPKIN_HTTP_PORT
+            value: "9411"
+          - name: MEMORY_MAX_TRACES
+            value: "50000"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 16686
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 16686
+          resources:
+            requests:
+              cpu: 10m
             
       affinity:      
         nodeAffinity:

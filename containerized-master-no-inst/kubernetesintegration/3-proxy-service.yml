@@ -9,5 +9,13 @@ spec:
   - name: wavefront
     port: 2878
     protocol: TCP
+  - name: jaeger-collector-tchannel
+    port: 14267
+    protocol: TCP
+    targetPort: 14267
+  - name: jaeger-collector-http
+    port: 14267
+    protocol: TCP
+    targetPort: 14268
   selector:
     k8s-app: wavefront-proxy

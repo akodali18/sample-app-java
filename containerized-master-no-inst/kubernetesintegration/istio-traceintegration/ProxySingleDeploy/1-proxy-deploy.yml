@@ -3,34 +3,53 @@ apiVersion: apps/v1
 # Kubernetes versions before 1.8.0 should use apps/v1beta1 or extensions/v1beta1
 kind: Deployment
 metadata:
+  name: wavefront-proxy
+  namespace: default
   labels:
    app: wavefront-proxy
    name: wavefront-proxy
-  name: wavefront-proxy
-  namespace: default
 spec:
   replicas: 1
   selector:
    matchLabels:
-    k8s-app: wavefront-proxy
+    app: wavefront-proxy
   template:
     metadata:
       labels:
-        k8s-app: wavefront-proxy
+        app: wavefront-proxy
     spec:
       containers:
       - name: wavefront-proxy
-        image: wavefronthq/proxy:latest
+        image: "us.gcr.io/wavefront-gcp-dev/akodali/wavefront-proxy-withmetrics"
         imagePullPolicy: Always
         env:
         - name: WAVEFRONT_URL
           value: https://tracing.wavefront.com/api/
         - name: WAVEFRONT_TOKEN
-          value: b31a99f4-cd87-46b8-a364-b6f8ec0a3255
+          value: da0ec2bf-a933-481b-9fbb-a21e08f11523
         - name: WAVEFRONT_PROXY_ARGS
-          value: --traceJaegerListenerPorts 6831,6832,14267,14268
+          value: --traceZipkinListenerPorts 9411
         ports:
         - containerPort: 2878
           protocol: TCP
+        - containerPort: 9411
         securityContext:
-          privileged: false
+          privileged: 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wavefront-proxy
+  labels:
+    app: wavefront-proxy
+spec:
+  ports:
+  - name: wavefront
+    port: 2878
+    protocol: TCP
+  - name: http
+    port: 9411
+    targetPort: 9411
+    protocol: TCP
+  selector:
+    app: wavefront-proxy
